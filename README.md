@@ -196,6 +196,12 @@ The `NUMBER` argument refers to the number of taskmanagers that will be spawned 
 > ### Note
 > The `NUMBER` argument is optional, and if it is omitted, only one taskmanager will be spawned.
 
+# What happens on the cluster?
+For more information, check *httk*'s official documentation.
+1. The taskmanager that we started on the cluster scans through the folder structure looking for tasks to run, which are the "special" folders named `ht.task.XXX`.
+2. Each task folder has a file named `ht_steps`, which is called the runscript. This script controls the flow of the VASP calculation(s).
+In our example, the `ht_steps` is told to relax the geometry (based on the settings in `INCAR.relax`) and then finish.
+
 # Receiving calculations from the cluster
 Once the calculations have finished, one can download the output files from the cluster with the following command:
 - `httk-tasks-receive-from-computer <computer-name>:<queue>`
