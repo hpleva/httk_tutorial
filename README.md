@@ -16,7 +16,10 @@ This step-by-step tutorial can be completed in a pre-prepared environment that i
 The VM is started with the following procedure:
 
 1. On the command line, navigate to the folder that contains the file called `Vagrantfile`.
-2.
+2. Run the command `vagrant up`.
+3. Run the command `vagrant ssh`.
+
+You should now be in the shell of the virtual machine.
 
 # Installation
 
