@@ -1,0 +1,105 @@
+#!/bin/bash
+# Tutorial run, relax until converged
+# 1.0
+#
+# The second row of your ht_steps script should be the 'name' of
+# your run script program, and the third the version number.
+# When your run is being processed, these are picked out automatically.
+#
+. "$HTTK_DIR"/Execution/tasks/ht_tasks_api.sh
+. "$HTTK_DIR"/Execution/tasks/vasp/vasptools.sh
+
+#. /opt/runexample-files/ht_tasks_api.sh
+#. /opt/runexample-files/vasptools2.sh
+
+# For now we want to rely on the taskmanager timeout, so just
+# keep the timeout of our RUN_CONTROLLED somewhat larger
+TIMEOUT=$((HT_TASKMGR_TIMEOUT + 3600))
+# (It may be a future feature to let some computations
+# timeout earlier though.)
+
+HT_TASK_INIT "$@"
+
+echo "== ht_steps for preinit run, step: $STEP"
+
+####################### start ############################
+if [ "$STEP" == "start" ]; then
+
+    cp ../POSCAR POSCAR
+    VASP_PREPARE_POTCAR ./POSCAR
+    VASP_POTCAR_SUMMARY
+
+    HT_TASK_ATOMIC_SECTION_START
+    HT_TASK_ATOMIC_RUNLOG_HEADLINE "START INPUT"
+    HT_TASK_ATOMIC_RUNLOG_APPEND ../POSCAR ../POTCAR.summary
+
+    HT_TASK_ATOMIC_SECTION_END_NEXT relax
+fi
+
+####################### relax ############################
+if [ "$STEP" == "relax" ]; then
+
+    VASP_PRECLEAN
+    cp ../INCAR.relax INCAR
+    VASP_PREPARE_CALC 
+    # Remove the NPAR parameter from INCAR:
+    sed -i '/NPAR/d' INCAR
+    VASP_PREPARE_KPOINTS 10 
+
+    VASP_RUN_CONTROLLED "$TIMEOUT" $VASP_EXECUTE
+    RETURNCODE="$?"
+
+    echo "RETURN CODE: $RETURNCODE"
+
+    VASP_CLEAN_OUTCAR
+
+    # We keep going if all went well, OR, if we run out of nsw steps, other errors
+    # we try to fix.
+    if [ "$RETURNCODE" == "0" -o "$RETURNCODE" == "4" ]; then
+	HT_TASK_ATOMIC_SECTION_START
+	# relaxation step successfull
+
+	NEWENERGY=$(VASP_GET_ENERGY ../OSZICAR)
+	
+	HT_TASK_ATOMIC_RUNLOG_HEADLINE "END relax"
+	HT_TASK_ATOMIC_RUNLOG_APPEND ../INCAR ../KPOINTS ../CONTCAR ../ht.controlled.msgs ../ht.remedy.*
+	HT_TASK_ATOMIC_RUNLOG_NOTE "ENERGY: $NEWENERGY"
+	
+	mv ../OUTCAR.cleaned OUTCAR.cleaned.relax-final
+	mv ../XDATCAR XDATCAR.relax-final
+	mv ../OSZICAR OSZICAR.relax-final
+	mv ../vasp.out vasp.out.relax-final
+	mv ../CONTCAR CONTCAR.relax-final
+
+	mv ../CHGCAR CHGCAR.relax-final
+
+	HT_TASK_ATOMIC_SECTION_END_NEXT cleanup
+    fi
+    # relaxation step unsuccessfull, prioritize down
+    # this run, and try to fix the problem
+    HT_TASK_SET_PRIORITY 5
+
+    HT_TASK_ATOMIC_SECTION_START
+    VASP_INPUTS_FIX_ERROR 
+    RESULT="$?"
+    if [ "$RESULT" == "0" ]; then
+	HT_TASK_ATOMIC_SECTION_END_NEXT relax
+    else
+	HT_TASK_ATOMIC_SECTION_END_BROKEN 
+    fi
+fi
+
+####################### cleanup ############################
+if [ "$STEP" == "cleanup" ]; then
+
+    rm -f ../OSZICAR OSZICAR.last
+    rm -f ../CONTCAR CONTCAR.last
+    rm -f ../CHGCAR CHGCAR.last
+
+    HT_TASK_CLEANUP
+    rm -f CHG EIGENVAL ht.controlled.msgs IBZKPT vasprun.xml POSCAR POTCAR WAVECAR PCDAT OUTCAR
+  
+    HT_TASK_COMPRESS
+    HT_TASK_FINISHED
+fi
+
