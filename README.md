@@ -15,7 +15,7 @@ This step-by-step tutorial can be completed in a pre-prepared environment that i
 
 The VM is started with the following procedure:
 
-1. On the command line, navigate to the folder that contains the file called `Vagrantfile`.
+1. On the command line, navigate to the `httk_tutorial` folder that contains the file called `Vagrantfile`.
 2. Run the command `vagrant up`.
 3. Run the command `vagrant ssh`.
 
@@ -216,7 +216,11 @@ An SQLite file called `example.sqlite` will be produced.
 One can verify that a functional database was created by running the example `read_database.py` Python script.
 The printout should look something like this:
 ```
+Simple search: Show all results:
 Formula: AlN       , total_energy =  -14.530
+Formula: NTi       , total_energy =  -19.572
+
+A more advanced search: Show only Ti-containing alloys:
 Formula: NTi       , total_energy =  -19.572
 ```
 
