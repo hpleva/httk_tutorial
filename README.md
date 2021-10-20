@@ -220,7 +220,10 @@ Simple search: Show all results:
 Formula: AlN       , total_energy =  -14.530
 Formula: NTi       , total_energy =  -19.572
 
-A more advanced search: Show only Ti-containing alloys:
+A more advanced search: Show only Al-containing results:
+Formula: AlN       , total_energy =  -14.530
+
+A more advanced search: Show only the result with the lowest total energy:
 Formula: NTi       , total_energy =  -19.572
 ```
 
