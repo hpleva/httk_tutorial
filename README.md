@@ -89,7 +89,7 @@ ht.project/
 2. When asked about setting up a project computer, answer yes.
 3. The is asked to choose a template for the computer:
     - `local` is for testing, e.g. on your laptop.
-    - `local-slurm` if your local machine has SLURM installed.
+    - `local-slurm` if the *httk* project is located on the same supercomputer we want to run the calculations on.
     - `ssh-slurm` is for the remote computing clusters.
 4. We will setup a remote cluster, so choose `ssh-slurm`.
 5. Follow the instructions on screen:
