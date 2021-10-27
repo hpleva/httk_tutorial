@@ -66,10 +66,10 @@ Vagrant.configure("2") do |config|
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
 
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   apt-get update
-  #   apt-get install -y python3-pip python-is-python3 tree sqlite3
-  # SHELL
+  config.vm.provision "shell", inline: <<-SHELL
+    apt-get update
+    apt-get install -y python3-pip python-is-python3 tree sqlite3
+  SHELL
 
   config.vm.provision "shell", inline: <<-SHELL
     mkdir -p /home/vagrant/project
