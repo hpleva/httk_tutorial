@@ -17,6 +17,7 @@ The VM is started with the following procedure:
 
 1. On the command line, navigate to the `httk_tutorial` folder that contains the file called `Vagrantfile`.
 2. Run the command `vagrant up`.
+    - If there is need to specify the VM provider, use the `--provider` flag, e.g. `vagrant up --provider virtualbox` or `vagrant up --provider libvirt`.
 3. Run the command `vagrant ssh`.
 
 You should now be in the shell of the virtual machine.
@@ -135,6 +136,9 @@ The values of the parameters should be chosen in such a way that the calculation
 > ### Note
 > In order to use the `SLURM_RESERVATION="devel"` option a modified version of *httk* is needed, because it is not (yet) implemented in the official *httk* git repository.
 
+> ### Tip
+> There is generally no need to run `httk-computer-setup` *every* time we create a new project.
+> In the future, it will be easier to copy the `ht.project` folder from your old project into your new project and edit the relevant config options with a text editor, e.g. the `project_name` parameter in the `ht.project/config` file should be given the name of your new project.
 
 # Generating VASP input files
 In a high-throughput scenario we want to generate the many input files in an automated way.
