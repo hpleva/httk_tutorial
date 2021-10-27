@@ -210,7 +210,7 @@ In our example, the `ht_steps` is told to relax the geometry (based on the setti
 Once the calculations have finished, one can download the output files from the cluster with the following command:
 - `httk-tasks-receive-from-computer <computer-name>:<queue>`
 
-# Storing results in a (local) database
+# Storing results in a (local) SQLite database
 VASP output files are analyzed and data stored in an SQLite database by *httk*.
 The project folder contains an example Python script `make_database.py` that accomplishes this.
 - Run the script: `python make_database.py`
