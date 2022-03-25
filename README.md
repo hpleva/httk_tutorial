@@ -1,5 +1,6 @@
 # Introduction
-This step-by-step tutorial can be completed in a pre-prepared environment that is contained in a Vagrant virtual machine. In order to start the virtual machine (VM), some dependencies must be installed:
+In order to avoid installation hassle, this step-by-step tutorial can be completed in a pre-prepared environment that is contained in a Vagrant virtual machine.
+In order to start the virtual machine (VM), some dependencies must be installed:
 
 #### Windows
 - Vagrant
